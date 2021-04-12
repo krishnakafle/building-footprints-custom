@@ -3,7 +3,7 @@
     "/data/titane/user/nigirard/data",
     "~/data",
     "/data",
-    "/home/krishna/building-footprints-custom/frameField"
+    "/home/krishna/building-footprints-custom/frameField/data"
   ],
   "num_workers": null,  // If null, will use multiprocess.cpu_count() workers in total
   "data_aug_params": {
