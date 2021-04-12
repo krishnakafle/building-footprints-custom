@@ -2,7 +2,8 @@
   "data_dir_candidates": [
     "/data/titane/user/nigirard/data",
     "~/data",
-    "/data"
+    "/data",
+    "/home/krishna/building-footprints-custom/frameField"
   ],
   "num_workers": null,  // If null, will use multiprocess.cpu_count() workers in total
   "data_aug_params": {
