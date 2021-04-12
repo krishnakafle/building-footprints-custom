@@ -144,6 +144,48 @@ def get_mapping_challenge(config, root_dir, folds):
 
     return ds_list
 
+def get_uav(config, root_dir, folds):
+    from torch_lydorn.torchvision.datasets import MappingChallenge
+
+    if "train" in folds or "val" in folds or "train_val" in folds:
+        train_online_cpu_transform = data_transforms.get_online_cpu_transform(config,
+                                                                              augmentations=config["data_aug_params"][
+                                                                                  "enable"])
+        ds = MappingChallenge(root_dir,
+                              transform=train_online_cpu_transform,
+                              pre_transform=data_transforms.get_offline_transform_patch(),
+                              small=config["dataset_params"]["small"],
+                              fold="train",
+                              pool_size=config["num_workers"])
+        torch.manual_seed(config["dataset_params"]["seed"])  # Ensure a seed is set
+        train_split_length = int(round(config["dataset_params"]["train_fraction"] * len(ds)))
+        val_split_length = len(ds) - train_split_length
+        train_ds, val_ds = torch.utils.data.random_split(ds, [train_split_length, val_split_length])
+
+    ds_list = []
+    for fold in folds:
+        if fold == "train":
+            ds_list.append(train_ds)
+        elif fold == "val":
+            ds_list.append(val_ds)
+        elif fold == "train_val":
+            ds_list.append(ds)
+        elif fold == "test":
+            # The val fold from the original challenge is used as test here
+            # because we don't have the ground truth for the test_images fold of the challenge:
+            test_online_cpu_transform = data_transforms.get_eval_online_cpu_transform()
+            test_ds = MappingChallenge(root_dir,
+                                       transform=test_online_cpu_transform,
+                                       pre_transform=data_transforms.get_offline_transform_patch(),
+                                       small=config["dataset_params"]["small"],
+                                       fold="val",
+                                       pool_size=config["num_workers"])
+            ds_list.append(test_ds)
+        else:
+            print_utils.print_error("ERROR: fold \"{}\" not recognized, implement it in dataset_folds.py.".format(fold))
+            exit()
+
+    return ds_list
 
 def get_opencities_competition(config, root_dir, folds):
     from torch_lydorn.torchvision.datasets import RasterizedOpenCities, OpenCitiesTestDataset
@@ -220,6 +262,10 @@ def get_folds(config, root_dir, folds):
 
     elif config["dataset_params"]["root_dirname"] == "mapping_challenge_dataset":
         return get_mapping_challenge(config, root_dir, folds)
+    
+    elif config["dataset_params"]["root_dirname"] == "UAV":
+        return get_uav(config, root_dir, folds)
+
 
     elif config["dataset_params"]["root_dirname"] == "segbuildings":
         return get_opencities_competition(config, root_dir, folds)
