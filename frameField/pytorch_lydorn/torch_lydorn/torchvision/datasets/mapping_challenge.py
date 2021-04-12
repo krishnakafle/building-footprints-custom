@@ -238,7 +238,8 @@ def main():
         "data_dir_candidates": [
                 "/data/titane/user/nigirard/data",
                 "~/data",
-                "/data"
+                "/data",
+                "/home/krishna/building-footprints-custom/frameField/data"
         ],
         "dataset_params": {
             "small": True,
