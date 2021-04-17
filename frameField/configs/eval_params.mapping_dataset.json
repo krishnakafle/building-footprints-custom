@@ -3,7 +3,8 @@
 
   "save_individual_outputs": {
     "seg": false,
-    "poly_viz": false
+    "poly_viz": true,
+    "poly_shapefile":true
   },
 
   "save_aggregated_outputs": {
