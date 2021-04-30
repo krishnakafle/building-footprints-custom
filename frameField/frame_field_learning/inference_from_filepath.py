@@ -55,6 +55,7 @@ def inference_from_filepath(config, in_filepaths, backbone, out_dirpath=None):
 
         # Remove batch dim:
         tile_data = local_utils.split_batch(tile_data)[0]
+        print(tile_data)
 
         # --- Saving outputs --- #
 

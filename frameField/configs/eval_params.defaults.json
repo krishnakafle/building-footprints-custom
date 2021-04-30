@@ -23,7 +23,7 @@
   "seg_threshold": 0.5,
 
   "save_individual_outputs": {
-    "image": false,
+    "image": true,
     "seg_gt": false,
     "seg": false,
     "seg_mask": false,
@@ -31,7 +31,7 @@
     "seg_luxcarta": false,
     "crossfield": false,
     "uv_angles": false,
-    "poly_shapefile": false,
+    "poly_shapefile": true,
     "poly_geojson": false,
     "poly_viz": false
   },
